@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">P1-PopularMoviesApp</string>
+    <string name="app_name" translatable="false">P1-PopularMoviesApp</string>
+    <string name="message_offline">Ops... you appear to be offline!</string>
 </resources>
