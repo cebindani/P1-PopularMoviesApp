@@ -26,37 +26,44 @@ class FetchMoviesData extends AsyncTask<String, String, List<Movie>> {
     private static final String LOG_TAG = FetchMoviesData.class.getSimpleName();
 
     private String moviesJsonStr = null;
-//    private List<Movie> mMovieList;
+    private AsyncResponse mAsyncResponse;
+
+    FetchMoviesData(AsyncResponse mAsyncResponse) {
+        this.mAsyncResponse = mAsyncResponse;
+    }
 
     @Override
     protected List<Movie> doInBackground(String... strings) {
-        try {
-            return getMovies(strings[0]);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return null;
+        return getMovies(strings[0]);
     }
 
     @Override
     protected void onPostExecute(List<Movie> moviesList) {
-        if (moviesList != null) {
-
-        }
         super.onPostExecute(moviesList);
+        if (moviesList != null) {
+            mAsyncResponse.onSuccess(moviesList);
+        } else {
+            mAsyncResponse.onFailure();
+        }
+
 
     }
 
 
-    private List<Movie> getMovies(String apiUrlString) throws JSONException {
+    private List<Movie> getMovies(String apiUrlString) {
         MovieDBAPIConnection(apiUrlString);
-        return (moviesJsonStr != null) ? getMovieDataFromJSON(moviesJsonStr) : null;
+        //TODO: fazer fallback caso tenha exception na conexão ( throws IOException )
+        if (moviesJsonStr != null) {
+            return getMovieDataFromJSON(moviesJsonStr);
+        } else {
+            return null;
+        }
 
+//        return (moviesJsonStr != null) ? getMovieDataFromJSON(moviesJsonStr) : null;
     }
 
 
-    private void MovieDBAPIConnection(String apiUrlString) {
+    private void MovieDBAPIConnection(String apiUrlString){
 
         HttpURLConnection connection = null;
         try {
@@ -81,7 +88,7 @@ class FetchMoviesData extends AsyncTask<String, String, List<Movie>> {
 
         } catch (java.io.IOException e) {
             e.printStackTrace();
-            Log.e(LOG_TAG, "Error: ", e);
+            Log.e(LOG_TAG, "Error: " + e);
         } finally {
             if (connection != null) {
                 connection.disconnect();
@@ -100,7 +107,7 @@ class FetchMoviesData extends AsyncTask<String, String, List<Movie>> {
     }
 
 
-    private List<Movie> getMovieDataFromJSON(String moviesJsonStr) throws JSONException {
+    private List<Movie> getMovieDataFromJSON(String moviesJsonStr) {
 
         if (moviesJsonStr == null) {
             return null;
@@ -108,32 +115,37 @@ class FetchMoviesData extends AsyncTask<String, String, List<Movie>> {
 
         List<Movie> moviesList = new ArrayList<>();
 
-        JSONObject jsonObject = new JSONObject(moviesJsonStr);
-        JSONArray results = jsonObject.getJSONArray("results");
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = new JSONObject(moviesJsonStr);
+            JSONArray results = jsonObject.getJSONArray("results");
 
-        for (int i = 0; i < results.length(); i++) {
-            Long movieId = results.getJSONObject(i).getLong("id");
-            String posterPath = results.getJSONObject(i).getString("poster_path");
-            String overview = results.getJSONObject(i).getString("overview");
-            String releaseDate = results.getJSONObject(i).getString("release_date");
-            String originalTitle = results.getJSONObject(i).getString("original_title");
-            String backdropPath = results.getJSONObject(i).getString("backdrop_path");
-            Double voteAverage = results.getJSONObject(i).getDouble("vote_average");
+            for (int i = 0; i < results.length(); i++) {
+                Long movieId = results.getJSONObject(i).getLong("id");
+                String posterPath = results.getJSONObject(i).getString("poster_path");
+                String overview = results.getJSONObject(i).getString("overview");
+                String releaseDate = results.getJSONObject(i).getString("release_date");
+                String originalTitle = results.getJSONObject(i).getString("original_title");
+                String backdropPath = results.getJSONObject(i).getString("backdrop_path");
+                Double voteAverage = results.getJSONObject(i).getDouble("vote_average");
 
-            Movie movie = new Movie(
-                    Uri.parse(posterPath),
-                    Uri.parse(backdropPath),
-                    movieId,
-                    originalTitle,
-                    releaseDate,
-                    overview,
-                    voteAverage);
+                Movie movie = new Movie(
+                        posterPath,
+                        backdropPath,
+                        movieId,
+                        originalTitle,
+                        releaseDate,
+                        overview,
+                        voteAverage);
 
-            moviesList.add(i, movie);
-            Log.d(LOG_TAG, "getMovieDataFromJSON: " + movie.toString());
+                moviesList.add(i, movie);
+                Log.d(LOG_TAG, "getMovieDataFromJSON: " + movie.toString());
 
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            moviesList = null;
         }
-
         return moviesList;
     }
 
