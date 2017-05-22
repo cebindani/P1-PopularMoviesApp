@@ -4,5 +4,4 @@
     android:id="@+id/movies_recyclerview"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.dmaila.popularmoviesapp.MainActivity"
-    />
+    tools:context="com.dmaila.popularmoviesapp.MainActivity" />

@@ -40,7 +40,7 @@ class FetchMoviesData extends AsyncTask<String, String, List<Movie>> {
     @Override
     protected void onPostExecute(List<Movie> moviesList) {
         super.onPostExecute(moviesList);
-        if (moviesList != null) {
+        if (moviesList != null && moviesList.size() != 0) {
             mAsyncResponse.onSuccess(moviesList);
         } else {
             mAsyncResponse.onFailure();
@@ -115,7 +115,7 @@ class FetchMoviesData extends AsyncTask<String, String, List<Movie>> {
 
         List<Movie> moviesList = new ArrayList<>();
 
-        JSONObject jsonObject = null;
+        JSONObject jsonObject;
         try {
             jsonObject = new JSONObject(moviesJsonStr);
             JSONArray results = jsonObject.getJSONArray("results");

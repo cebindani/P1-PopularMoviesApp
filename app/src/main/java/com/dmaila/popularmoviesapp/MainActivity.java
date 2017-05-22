@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-       String apiUrlString = "http://api.themoviedb.org/3/movie/popular?api_key=" + MOVIE_DB_API_KEY;
+        String apiUrlString = "http://api.themoviedb.org/3/movie/popular?api_key=" + MOVIE_DB_API_KEY;
 
         NetworkInfo networkInfo = getNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
@@ -45,15 +45,15 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(MainActivity.this, 3);
 
         RecyclerView myRecyclerView = (RecyclerView) findViewById(R.id.movies_recyclerview);
-        myRecyclerView.setLayoutManager(gridLayoutManager);
-
         CustomAdapter customAdapter = new CustomAdapter(new ArrayList<Movie>(moviesList), MainActivity.this);
         myRecyclerView.setAdapter(customAdapter);
+        myRecyclerView.setLayoutManager(gridLayoutManager);
 
     }
 
     @Override
     public void onFailure() {
+        Toast.makeText(MainActivity.this, "Error!", Toast.LENGTH_SHORT).show();
 
     }
 }
