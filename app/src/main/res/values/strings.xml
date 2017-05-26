@@ -2,4 +2,5 @@
     <string name="app_name" translatable="false">P1-PopularMoviesApp</string>
     <string name="message_offline">Ops... you appear to be offline!</string>
     <string name="movie_title_placeholder">movie title</string>
+    <string name="default_movie_name">Filme</string>
 </resources>
