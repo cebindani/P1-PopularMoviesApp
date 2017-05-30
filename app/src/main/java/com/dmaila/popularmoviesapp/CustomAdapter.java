@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -59,13 +58,10 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         public void onClick(View v) {
             int position = getAdapterPosition();
 
-            String title = movieList.get(position).getOriginalTitle();
-
-            Toast.makeText(context, title, Toast.LENGTH_SHORT).show();
-
+            Movie movieParcel = movieList.get(position);
             Intent intent = new Intent(context, MovieDetailActivity.class);
+            intent.putExtra("movieParcel",movieParcel);
             context.startActivity(intent);
-
 
         }
     }
