@@ -50,8 +50,8 @@ class FetchMoviesData extends AsyncTask<String, String, List<Movie>> {
     }
 
 
-    private List<Movie> getMovies(String apiUrlString) {
-        MovieDBAPIConnection(apiUrlString);
+    private List<Movie> getMovies(String apiUrlPath) {
+        MovieDBAPIConnection(apiUrlPath);
         //TODO: fazer fallback caso tenha exception na conexão ( throws IOException )
         if (moviesJsonStr != null) {
             return getMovieDataFromJSON(moviesJsonStr);
@@ -63,11 +63,11 @@ class FetchMoviesData extends AsyncTask<String, String, List<Movie>> {
     }
 
 
-    private void MovieDBAPIConnection(String apiUrlString){
+    private void MovieDBAPIConnection(String apiUrlPath){
 
         HttpURLConnection connection = null;
         try {
-            URL url = new URL(apiUrlString);
+            URL url = mountApiUrl(apiUrlPath);
 
             connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
