@@ -3,4 +3,8 @@
     <string name="message_offline">Ops... you appear to be offline!</string>
     <string name="movie_title_placeholder">movie title</string>
     <string name="default_movie_name">Filme</string>
+    <string name="release_date">Release date:</string>
+    <string name="rating">Rating:</string>
+    <string name="title">Title</string>
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec mattis maximus consectetur. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur pharetra commodo elit, sit amet elementum sapien malesuada a. Donec non libero ipsum. Etiam tincidunt nulla et neque hendrerit feugiat. Nunc metus leo, porta eu metus sed, tristique dictum lacus. Aliquam metus purus, tincidunt id magna vitae, facilisis efficitur arcu.</string>
 </resources>

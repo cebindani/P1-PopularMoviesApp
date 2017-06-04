@@ -16,7 +16,7 @@ public class Movie implements Parcelable{
     private String originalTitle;
     private String releaseDate;
     private String overview; //synopsis
-    private double userRating; //user rating
+    private double userRating;
     public static final String BASE_URL = "image.tmdb.org/t/p";
     public static final String IMG_SIZE = "w342";
 
@@ -137,6 +137,7 @@ public class Movie implements Parcelable{
     protected Movie(Parcel in) {
         originalTitle = in.readString();
         posterUrl = in.readString();
+        backdropUrl = in.readString();
         overview = in.readString();
         userRating = in.readDouble();
         releaseDate = in.readString();
@@ -164,6 +165,7 @@ public class Movie implements Parcelable{
     public void writeToParcel(Parcel out, int flags) {
         out.writeString(originalTitle);
         out.writeString(posterUrl);
+        out.writeString(backdropUrl);
         out.writeString(overview);
         out.writeDouble(userRating);
         out.writeString(releaseDate);
