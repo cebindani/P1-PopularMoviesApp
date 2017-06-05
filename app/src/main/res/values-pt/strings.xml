@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">P1-PopularMoviesApp</string>
-    <string name="message_offline">Ops... você está offline!</string>
+    <string name="message_offline">Ops… você está offline!</string>
+    <string name="default_movie_name">Filme</string>
+    <string name="release_date">Data de lançamento:</string>
+    <string name="title">Título</string>
+    <string name="rating">Avaliação:</string>
+    <string name="sorting_popular">Ordenando por filmes populares</string>
+    <string name="sorting_top_rated">Ordenando por filmes melhor avaliados</string>
+    <string name="sort_by">Mudar exibição</string>
+    <string name="retry">Tente novamente</string>
+    <string name="something_went_wrong">Oops,\nalgo deu errado!</string>
 </resources>

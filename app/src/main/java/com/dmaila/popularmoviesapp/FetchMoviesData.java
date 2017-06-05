@@ -34,7 +34,14 @@ class FetchMoviesData extends AsyncTask<String, String, List<Movie>> {
 
     @Override
     protected List<Movie> doInBackground(String... strings) {
-        return getMovies(strings[0]);
+        List<Movie> moviesList;
+        try {
+            moviesList = getMovies(strings[0]);
+            return moviesList;
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
@@ -50,20 +57,21 @@ class FetchMoviesData extends AsyncTask<String, String, List<Movie>> {
     }
 
 
-    private List<Movie> getMovies(String apiUrlPath) {
-        MovieDBAPIConnection(apiUrlPath);
-        //TODO: fazer fallback caso tenha exception na conexão ( throws IOException )
-        if (moviesJsonStr != null) {
-            return getMovieDataFromJSON(moviesJsonStr);
-        } else {
-            return null;
+    private List<Movie> getMovies(String apiUrlPath) throws RuntimeException {
+        try {
+            MovieDBAPIConnection(apiUrlPath);
+            if (moviesJsonStr != null) {
+                return getMovieDataFromJSON(moviesJsonStr);
+            }
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage(), e);
         }
-
-//        return (moviesJsonStr != null) ? getMovieDataFromJSON(moviesJsonStr) : null;
+        return null;
     }
 
 
-    private void MovieDBAPIConnection(String apiUrlPath){
+    private void MovieDBAPIConnection(String apiUrlPath) throws IOException {
 
         HttpURLConnection connection = null;
         try {
@@ -76,19 +84,17 @@ class FetchMoviesData extends AsyncTask<String, String, List<Movie>> {
 
             int responseCode = connection.getResponseCode();
             Log.d(LOG_TAG, "Response code: " + responseCode);
-            if (responseCode != HttpURLConnection.HTTP_OK) {
-                throw new IOException("HTTP error code: " + responseCode);
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                InputStream inputStream = connection.getInputStream();
+                if (inputStream != null) {
+                    moviesJsonStr = getStringFromStream(inputStream);
+                    Log.v(LOG_TAG, "Movie JSON string: " + moviesJsonStr);
+                }
             }
 
-            InputStream inputStream = connection.getInputStream();
-            if (inputStream != null) {
-                moviesJsonStr = getStringFromStream(inputStream);
-                Log.v(LOG_TAG, "Movie JSON string: " + moviesJsonStr);
-            }
-
-        } catch (java.io.IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
-            Log.e(LOG_TAG, "Error: " + e);
+            throw new IOException(connection.getResponseMessage(), e);
         } finally {
             if (connection != null) {
                 connection.disconnect();
@@ -107,7 +113,7 @@ class FetchMoviesData extends AsyncTask<String, String, List<Movie>> {
     }
 
 
-    private List<Movie> getMovieDataFromJSON(String moviesJsonStr) {
+    private List<Movie> getMovieDataFromJSON(String moviesJsonStr) throws JSONException {
 
         if (moviesJsonStr == null) {
             return null;
@@ -142,9 +148,10 @@ class FetchMoviesData extends AsyncTask<String, String, List<Movie>> {
                 Log.d(LOG_TAG, "getMovieDataFromJSON: " + movie.toString());
 
             }
+
         } catch (JSONException e) {
             e.printStackTrace();
-            moviesList = null;
+            throw new RuntimeException(e.getMessage(), e);
         }
         return moviesList;
     }

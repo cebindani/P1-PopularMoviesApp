@@ -5,9 +5,22 @@ import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Movie implements Parcelable{
+public class Movie implements Parcelable {
 
 
+    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel in) {
+            return new Movie(in);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
+    private static final String BASE_URL = "image.tmdb.org/t/p";
+    private static final String IMG_SIZE = "w342";
     private String posterPath;
     private String posterUrl;
     private String backdropPath;
@@ -17,8 +30,6 @@ public class Movie implements Parcelable{
     private String releaseDate;
     private String overview; //synopsis
     private double userRating;
-    public static final String BASE_URL = "image.tmdb.org/t/p";
-    public static final String IMG_SIZE = "w342";
 
     public Movie(String posterPath, String backdropPath, long movieId, String originalTitle, String releaseDate, String overview, double userRating) {
         this.posterPath = posterPath;
@@ -35,78 +46,42 @@ public class Movie implements Parcelable{
     public Movie() {
     }
 
-    private String getPosterPath() {
-        return posterPath;
-    }
-
-    public void setPosterPath(String posterPath) {
-        this.posterPath = posterPath;
-        setPosterUrl(generateImageURL(posterPath));
+    protected Movie(Parcel in) {
+        originalTitle = in.readString();
+        posterUrl = in.readString();
+        backdropUrl = in.readString();
+        overview = in.readString();
+        userRating = in.readDouble();
+        releaseDate = in.readString();
+        movieId = in.readLong();
     }
 
     public String getPosterUrl() {
         return posterUrl;
     }
 
-    private void setPosterUrl(String posterUrl) {
-        this.posterUrl = posterUrl;
-    }
-
     public String getBackdropUrl() {
         return backdropUrl;
-    }
-
-    private void setBackdropUrl(String backdropUrl) {
-        this.backdropUrl = backdropUrl;
-        setBackdropUrl(generateImageURL(backdropPath));
-    }
-
-    private String getBackdropPath() {
-        return backdropPath;
-    }
-
-    public void setBackdropPath(String backdropPath) {
-        this.backdropPath = backdropPath;
     }
 
     public long getMovieId() {
         return movieId;
     }
 
-    public void setMovieId(long movieId) {
-        this.movieId = movieId;
-    }
-
     public String getOriginalTitle() {
         return originalTitle;
-    }
-
-    public void setOriginalTitle(String originalTitle) {
-        this.originalTitle = originalTitle;
     }
 
     public String getReleaseDate() {
         return releaseDate;
     }
 
-    public void setReleaseDate(String releaseDate) {
-        this.releaseDate = releaseDate;
-    }
-
     public String getOverview() {
         return overview;
     }
 
-    public void setOverview(String overview) {
-        this.overview = overview;
-    }
-
     public double getUserRating() {
         return userRating;
-    }
-
-    public void setUserRating(double userRating) {
-        this.userRating = userRating;
     }
 
     @Override
@@ -133,28 +108,6 @@ public class Movie implements Parcelable{
         return builder.toString();
 
     }
-
-    protected Movie(Parcel in) {
-        originalTitle = in.readString();
-        posterUrl = in.readString();
-        backdropUrl = in.readString();
-        overview = in.readString();
-        userRating = in.readDouble();
-        releaseDate = in.readString();
-        movieId = in.readLong();
-    }
-
-    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
-        @Override
-        public Movie createFromParcel(Parcel in) {
-            return new Movie(in);
-        }
-
-        @Override
-        public Movie[] newArray(int size) {
-            return new Movie[size];
-        }
-    };
 
     @Override
     public int describeContents() {

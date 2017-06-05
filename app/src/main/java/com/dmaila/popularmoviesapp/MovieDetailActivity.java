@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
@@ -26,19 +27,13 @@ public class MovieDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_movie_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
         Movie movie = intent.getParcelableExtra("movieParcel");
 
-        CollapsingToolbarLayout collapsingToolbarLayout;
-        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        collapsingToolbarLayout.setTitle(movie.getOriginalTitle());
-
-
+        CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         TextView originalTitleTextView = (TextView) findViewById(R.id.original_title);
         ImageView moviePosterImageView = (ImageView) findViewById(R.id.movie_poster);
         ImageView movieBackdropImageView = (ImageView) findViewById(R.id.movie_backdrop_image);
@@ -47,6 +42,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         TextView releaseDateTextView = (TextView) findViewById(R.id.release_date);
 
         if (intent.hasExtra("movieParcel")) {
+            collapsingToolbarLayout.setTitle(movie.getOriginalTitle());
             originalTitleTextView.setText(movie.getOriginalTitle());
             Picasso.with(context)
                     .load(movie.getBackdropUrl())
@@ -62,11 +58,14 @@ public class MovieDetailActivity extends AppCompatActivity {
             SimpleDateFormat stringToDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
             try {
                 Date date = stringToDate.parse(movie.getReleaseDate());
-                stringToDate = new SimpleDateFormat("dd/MM/yyyy");
+                stringToDate = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
                 releaseDateTextView.setText(stringToDate.format(date));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
+        } else {
+            Intent errorIntent = new Intent(this, ErrorActivity.class);
+            startActivity(errorIntent);
         }
 
     }
