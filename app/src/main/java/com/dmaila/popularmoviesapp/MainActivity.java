@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +25,6 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
     private static final String DEFAULT_API_URL_PATH = "popular";
     private static final String TOP_RATED_API_URL_PATH = "top_rated";
     Toolbar toolbar;
-    private String sortedBy = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
     private void getMoviesData(final String apiPath) {
         NetworkInfo networkInfo = getNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
-            sortedBy = apiPath;
             new FetchMoviesData(this).execute(apiPath);
         } else {
             Snackbar snackbar = Snackbar.make(toolbar, R.string.message_offline, Snackbar.LENGTH_INDEFINITE)
@@ -63,19 +62,17 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.sort_menu_item) {
-            if (sortedBy != null) {
-                switch (sortedBy) {
-                    case DEFAULT_API_URL_PATH:
-                        getMoviesData(TOP_RATED_API_URL_PATH);
-                        break;
-                    case TOP_RATED_API_URL_PATH:
-                        getMoviesData(DEFAULT_API_URL_PATH);
-                        break;
-                    default:
-                        return true;
-                }
-            }
+        switch (item.getItemId()) {
+            case R.id.sort_top_rated:
+                getMoviesData(TOP_RATED_API_URL_PATH);
+                Toast.makeText(this, R.string.sorting_top_rated, Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.sort_popular:
+                getMoviesData(DEFAULT_API_URL_PATH);
+                Toast.makeText(this, R.string.sorting_popular, Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                return true;
         }
         return true;
     }

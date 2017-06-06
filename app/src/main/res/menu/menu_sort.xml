@@ -3,8 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/sort_menu_item"
-        android:icon="@android:drawable/ic_menu_sort_by_size"
-        android:title="@string/sort_by"
-        app:showAsAction="always" />
+        android:id="@+id/sort_top_rated"
+        android:title="@string/top_rated"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/sort_popular"
+        android:title="@string/popular"
+        app:showAsAction="never" />
 </menu>

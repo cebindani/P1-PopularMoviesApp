@@ -5,9 +5,11 @@
     <string name="release_date">Data de lançamento:</string>
     <string name="title">Título</string>
     <string name="rating">Avaliação:</string>
-    <string name="sorting_popular">Ordenando por filmes populares</string>
+    <string name="sorting_popular">Ordenando por filmes mais populares</string>
     <string name="sorting_top_rated">Ordenando por filmes melhor avaliados</string>
     <string name="sort_by">Mudar exibição</string>
     <string name="retry">Tente novamente</string>
     <string name="something_went_wrong">Oops,\nalgo deu errado!</string>
+    <string name="popular">Mais populares</string>
+    <string name="top_rated">Melhor avaliado</string>
 </resources>
